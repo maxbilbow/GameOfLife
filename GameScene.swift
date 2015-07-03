@@ -10,8 +10,8 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    private var life: Life?
-    var cells: [[GameOfLifeNode]] = [[GameOfLifeNode]]()
+    private var life: GameOfLife?
+    var cells: [[GameOfLifeNode]]?
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -23,6 +23,9 @@ class GameScene: SKScene {
         //        self.addChild(myLabel)
     }
     
+    /// Enables simple interaction with the game
+    /// Touching a node will enable it. 
+    /// For each of it's neighbours there will be a one in 'chance' of it also being activated. Default is 1 in 2.
     func reviveNodeAndNeighbours(node: GameOfLifeNode, oneIn chance: Int = 2) {
         self.life?.a.set(node.ref.x, y: node.ref.y, b: true)
         node.update()
@@ -69,6 +72,7 @@ class GameScene: SKScene {
         node.update()
     }
     
+    
     override func mouseDown(theEvent: NSEvent) {
         /* Called when a mouse click occurs */
         
@@ -81,13 +85,13 @@ class GameScene: SKScene {
         
     }
     
-    private var lastTime: CFTimeInterval = 0
+    /// Animate the game and update the GameOfLife nodes to match their reference cells.
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         //        if currentTime > lastTime {
-        if let life = self.life {
+        if let life = self.life , let cells = self.cells {
             life.step()
-            for row in self.cells {
+            for row in cells {
                 for cell in row {
                     cell.update()
                 }
@@ -97,15 +101,17 @@ class GameScene: SKScene {
         }
     }
     
-    func setLife() {
+    /// Usually called by the ViewController or App delegate once the scene has been set up.
+    /// This creates an array of nodes that matches the bools in the GameOfLife
+    /// It can also be used to reset the game (untested)
+    func setLife(nodeRadius radius: CGFloat = 5) {
         let bounds = self.size
-        let radius: CGFloat = 5
-        self.life = Life.new(bounds.width / radius, height: bounds.height / radius)
-        
+        self.life = GameOfLife.new(bounds.width / radius, height: bounds.height / radius)
+        self.cells = [[GameOfLifeNode]]()
         for var y = 0; y < self.life?.h; ++y {
-            self.cells.append([GameOfLifeNode]())
+            self.cells?.append([GameOfLifeNode]())
             for var x = 0; x < self.life?.w; ++x {
-                self.cells[y].append(GameOfLifeNode(life: self.life!, x: x, y: y, radius: radius).addToScene(self))
+                self.cells?[y].append(GameOfLifeNode(life: self.life!, x: x, y: y, radius: radius).addToScene(self))
                 
             }
         }

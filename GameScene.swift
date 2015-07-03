@@ -62,26 +62,13 @@ class GameScene: SKScene {
                 self.life?.a.set(x, y: y, b: true)
             }
         }
-        node.update()
+        node.update() //Instant feedback
     }
     
     
-    override func mouseDown(theEvent: NSEvent) {
-        /* Called when a mouse click occurs */
-        
-        let location = theEvent.locationInNode(self)
-        
-        if let node = nodeAtPoint(location).parent as? GameOfLifeNode ?? nodeAtPoint(location) as? GameOfLifeNode {
-            self.reviveNodeAndNeighbours(node)
-        }
-        
-        
-    }
     
     /// Animate the game and update the GameOfLife nodes to match their reference cells.
     override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
-        //        if currentTime > lastTime {
         if let life = self.life , let cells = self.cells {
             life.step()
             for row in cells {
@@ -89,8 +76,6 @@ class GameScene: SKScene {
                     cell.update()
                 }
             }
-            //            }
-            //            self.lastTime = currentTime
         }
     }
     
@@ -98,14 +83,18 @@ class GameScene: SKScene {
     /// This creates an array of nodes that matches the bools in the GameOfLife
     /// It can also be used to reset the game (untested)
     func setLife(nodeRadius radius: CGFloat = 5) {
-        let bounds = self.size
-        self.life = GameOfLife.new(bounds.width / radius, height: bounds.height / radius)
+        
+        let width = Int(self.size.width / radius)
+        let height = Int(self.size.height / radius)
+        
+        self.life = GameOfLife.new(width: width, height: height)
+        
         self.cells = [[GameOfLifeNode]]()
+        
         for var y = 0; y < self.life?.h; ++y {
             self.cells?.append([GameOfLifeNode]())
             for var x = 0; x < self.life?.w; ++x {
                 self.cells?[y].append(GameOfLifeNode(life: self.life!, x: x, y: y, radius: radius).addToScene(self))
-                
             }
         }
     }

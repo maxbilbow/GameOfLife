@@ -10,6 +10,9 @@
 import Cocoa
 import SpriteKit
 
+typealias RMFloat = CGFloat
+typealias RMColor = NSColor
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
@@ -39,4 +42,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
         return true
     }
+}
+
+extension GameScene {
+    
+    override func mouseDown(theEvent: NSEvent) {
+        /* Called when a mouse click occurs */
+        
+        let location = theEvent.locationInNode(self)
+        
+        if let node = nodeAtPoint(location).parent as? GameOfLifeNode ?? nodeAtPoint(location) as? GameOfLifeNode {
+            self.reviveNodeAndNeighbours(node)
+        }
+        
+        
+    }
+    
 }

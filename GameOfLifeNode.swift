@@ -36,7 +36,7 @@ class GameOfLifeNode : SKNode {
         self.shape = SKShapeNode(circleOfRadius: radius)
         super.init()
         self.addChild(self.shape)
-        self.shape.fillColor = NSColor.yellowColor()
+        self.shape.fillColor = RMColor.yellowColor()
         self.shape.lineWidth = 0 //= NSColor.greenColor()
         do {
             try self.positionNode(buffer)

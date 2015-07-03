@@ -22,17 +22,6 @@ class GameOfLife : CustomStringConvertible {
         self.h = h
     }
     
-    
-    /// NewLife returns a new Life game state with a random initial state.
-    class func new(width: CGFloat, height: CGFloat) -> GameOfLife {
-        let w = Int(width); let h = Int(height)
-        var a: Field = Field.new(width: w, height: h)
-        for var i = 0; i < (w * h / 4); i++ {
-            a.set(random() % w,y: random() % h, b: true)
-        }
-        return GameOfLife(fieldA: a, fildB: Field.new(width: w, height: h), width: w, height: h)
-    }
-    
     /// NewLife returns a new Life game state with a random initial state.
     class func new(width w: Int, height h: Int) -> GameOfLife {
         var a: Field = Field.new(width: w, height: h)

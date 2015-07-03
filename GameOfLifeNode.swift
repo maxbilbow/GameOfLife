@@ -85,8 +85,20 @@ class GameOfLifeNode : SKNode {
             }
         }
         return result
-
     }
+    
+    /// Enables simple interaction with the game
+    /// Touching a node will enable it.
+    /// For each of it's neighbours there will be a one in 'chance' of it also being activated. Default is 1 in 2.
+    func reviveNodeAndNeighbours(oneIn chance: Int = 2) {
+        for cell in self.neighbours {
+            if random() % chance == 1 {
+                self.life.a.set(cell.x, y: cell.y, b: true)
+            }
+        }
+        self.update()
+    }
+
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

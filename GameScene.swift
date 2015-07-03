@@ -15,19 +15,7 @@ class GameScene: SKScene {
     
     /// SKNodes that mirror bools in The Game of Life
     private var cells: [[GameOfLifeNode]]?
-    
-    /// Enables simple interaction with the game
-    /// Touching a node will enable it. 
-    /// For each of it's neighbours there will be a one in 'chance' of it also being activated. Default is 1 in 2.
-    func reviveNodeAndNeighbours(node: GameOfLifeNode, oneIn chance: Int = 2) {
-        for cell in node.neighbours {
-            if random() % chance == 1 {
-                self.life?.a.set(cell.x, y: cell.y, b: true)
-            }
-        }
-        node.update()
-    }
-    
+
     
     
     /// Animate the game and update the GameOfLife nodes to match their reference cells.

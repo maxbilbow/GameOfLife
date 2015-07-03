@@ -51,10 +51,7 @@ extension GameScene {
         
         let location = theEvent.locationInNode(self)
         
-        if let node = nodeAtPoint(location).parent as? GameOfLifeNode ?? nodeAtPoint(location) as? GameOfLifeNode {
-            self.reviveNodeAndNeighbours(node)
-        }
-        
+        (nodeAtPoint(location).parent as? GameOfLifeNode ?? nodeAtPoint(location) as? GameOfLifeNode)?.reviveNodeAndNeighbours()
         
     }
     

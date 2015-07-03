@@ -72,6 +72,21 @@ class GameOfLifeNode : SKNode {
         scene.addChild(self)
         return self
     }
+    
+    var neighbours: [(x: Int, y: Int)] {
+        var result = [ self.ref ]
+        let x = self.ref.x; let y = self.ref.y
+        for var i = -1; i <= 1; i++ {
+            for var j = -1; j <= 1; j++ {
+                let cell: (x: Int, y: Int) = (x + i, y + j)
+                if (j != 0 || i != 0) && cell.x >= 0 && cell.x < self.life.w && cell.y >= 0 && cell.y < self.life.h {
+                    result.append(cell)
+                }
+            }
+        }
+        return result
+
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

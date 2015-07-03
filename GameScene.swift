@@ -20,49 +20,12 @@ class GameScene: SKScene {
     /// Touching a node will enable it. 
     /// For each of it's neighbours there will be a one in 'chance' of it also being activated. Default is 1 in 2.
     func reviveNodeAndNeighbours(node: GameOfLifeNode, oneIn chance: Int = 2) {
-        self.life?.a.set(node.ref.x, y: node.ref.y, b: true)
+        for cell in node.neighbours {
+            if random() % chance == 1 {
+                self.life?.a.set(cell.x, y: cell.y, b: true)
+            }
+        }
         node.update()
-        if let x: Int = node.ref.x - 1 where x > 0 {
-            if random() % chance == 1 {
-                self.life?.a.set(x, y: node.ref.y, b: true)
-            }
-        }
-        if let x: Int = node.ref.x + 1 where x <= self.life?.w {
-            if random() % chance == 1 {
-                self.life?.a.set(x, y: node.ref.y, b: true)
-            }
-        }
-        if let y: Int = node.ref.y - 1 where y > 0 {
-            if random() % chance == 1 {
-                self.life?.a.set(node.ref.x, y: y, b: true)
-            }
-        }
-        if let y: Int = node.ref.y + 1 where y <= self.life?.h {
-            if random() % chance == 1 {
-                self.life?.a.set(node.ref.x, y: y, b: true)
-            }
-        }
-        if let x: Int = node.ref.x + 1 where x <= self.life?.w, let y: Int = node.ref.y + 1 where y <= self.life?.h {
-            if random() % chance == 1 {
-                self.life?.a.set(x, y: y, b: true)
-            }
-        }
-        if let x: Int = node.ref.x - 1 where x > 0, let y: Int = node.ref.y - 1 where y > 0 {
-            if random() % chance == 1 {
-                self.life?.a.set(x, y: y, b: true)
-            }
-        }
-        if let x: Int = node.ref.x + 1 where x <= self.life?.w, let y: Int = node.ref.y - 1 where y > 0 {
-            if random() % chance == 1 {
-                self.life?.a.set(x, y: y, b: true)
-            }
-        }
-        if let x: Int = node.ref.x - 1 where x > 0, let y: Int = node.ref.y + 1 where y <= self.life?.h {
-            if random() % chance == 1 {
-                self.life?.a.set(x, y: y, b: true)
-            }
-        }
-        node.update() //Instant feedback
     }
     
     

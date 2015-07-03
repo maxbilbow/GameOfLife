@@ -10,18 +10,11 @@ import SpriteKit
 
 class GameScene: SKScene {
     
+    /// The Game of Life
     private var life: GameOfLife?
-    var cells: [[GameOfLifeNode]]?
     
-    override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        //        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        //        myLabel.text = "Hello, World!";
-        //        myLabel.fontSize = 65;
-        //        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
-        
-        //        self.addChild(myLabel)
-    }
+    /// SKNodes that mirror bools in The Game of Life
+    private var cells: [[GameOfLifeNode]]?
     
     /// Enables simple interaction with the game
     /// Touching a node will enable it. 

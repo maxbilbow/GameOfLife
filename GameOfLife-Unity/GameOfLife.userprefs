@@ -1,0 +1,13 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameOfLife/Scripts/GameOfLifeController.cs">
+    <Files>
+      <File FileName="Assets/GameOfLife/Scripts/GameOfLifeController.cs" Line="20" Column="17" />
+      <File FileName="Assets/GameOfLife/Scripts/GameOfLife.cs" Line="66" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

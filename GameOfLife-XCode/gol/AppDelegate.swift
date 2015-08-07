@@ -11,14 +11,25 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    static var theApp : AppDelegate!;
-    static var window: NSWindow! {
-        return theApp.window
+    static var theApp : AppDelegate?;
+    static var window: NSWindow? {
+        return theApp?.window
     }
     @IBOutlet weak var window: NSWindow!
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    override func awakeFromNib() {
+        print("Launching")
         AppDelegate.theApp = self;
+        
+    }
+    func applicationWillFinishLaunching(notification: NSNotification) {
+        
+    }
+    func applicationWillBecomeActive(notification: NSNotification) {
+        
+    }
+    func applicationDidFinishLaunching(aNotification: NSNotification) {
+        
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {

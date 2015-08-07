@@ -27,94 +27,144 @@ struct Vertex{
     
 };
 
+import GLKit
+typealias Matrix4 = GLKMatrix4
 
-import Metal
-import QuartzCore
-
-class Shape {
+extension Matrix4 {
+    static func makePerspectiveViewAngle(radians radians: Float, aspect: Float, nearZ: Float, farZ: Float) -> Matrix4 {
+        return GLKMatrix4MakePerspective(radians, aspect, nearZ, farZ)
+    }
     
-    let name: String
-    var vertexCount: Int
-    var vertexBuffer: MTLBuffer
-    var device: MTLDevice
+    static func makePerspectiveViewAngle(degrees degrees: Float, aspect: Float, nearZ: Float, farZ: Float) -> Matrix4 {
+        return makePerspectiveViewAngle(radians: GLKMathDegreesToRadians(degrees), aspect: aspect, nearZ: nearZ, farZ: farZ)
+    }
     
-    init(name: String, vertices: Array<Vertex>, device: MTLDevice){
-        // 1
-        var vertexData = Array<Float>()
-        for vertex in vertices{
-            vertexData += vertex.floatBuffer()
+    func multiplyLeft(right:Matrix4) -> Matrix4 {
+        return GLKMatrix4Multiply(self, right)
+    }
+    
+    mutating func translate(x: Float, y: Float, z: Float) {
+        self = GLKMatrix4Translate(self, x, y, z)
+    }
+    
+    mutating func rotateAbout(rx x: Float = 0, ry y: Float = 0, rz z: Float = 0) {
+        if x != 0 {
+            self = GLKMatrix4RotateX(self, x)
         }
-        let vPtr: UnsafePointer<Array<Float>> = UnsafePointer<Array<Float>>(vertexData)
-        
-        // 2
-        let dataSize = vertexData.count * sizeofValue(vertexData[0])
-        self.vertexBuffer = device.newBufferWithBytes(vPtr, length: dataSize, options: MTLResourceOptions.CPUCacheModeDefaultCache)
-        
-        // 3
-        self.name = name
-        self.device = device
-        self.vertexCount = vertices.count
+        if y != 0 {
+            self = GLKMatrix4RotateY(self, y)
+        }
+        if z != 0 {
+            self = GLKMatrix4RotateZ(self, z)
+        }
     }
-    private static var _square: Shape?
-    static var Square: Shape {
-        return _square ?? { () -> Shape in
-            _square = Shape(name: "Square", vertices: Vertex.Square, device: GameViewController.current.device)
-            return _square!
-        }()
+    
+    
+    mutating func rotateAbout(dx x: Float = 0, dy y: Float = 0, dz z: Float = 0) {
+        self.rotateAbout(
+            rx: GLKMathDegreesToRadians(x),
+            ry: GLKMathDegreesToRadians(y),
+            rz: GLKMathDegreesToRadians(z)
+        )
     }
+    
+    
+    mutating func rotateAroundX(rx x: Float = 0, ry y: Float = 0, rz z: Float = 0) {
+        if x != 0 {
+            self = GLKMatrix4RotateX(self, x)
+        }
+        if y != 0 {
+            self = GLKMatrix4RotateX(self, y)
+        }
+        if z != 0 {
+            self = GLKMatrix4RotateX(self, z)
+        }
+    }
+    
+    
+    mutating func rotateAroundX(dx x: Float = 0, dy y: Float = 0, dz z: Float = 0) {
+        self.rotateAbout(
+            rx: GLKMathDegreesToRadians(x),
+            ry: GLKMathDegreesToRadians(y),
+            rz: GLKMathDegreesToRadians(z)
+        )
+    }
+    
+    mutating func scale(x: Float, y: Float, z: Float) {
+        self = GLKMatrix4Scale(self, x, y, z)
+    }
+
+    mutating func raw() -> UnsafePointer<Void> {
+        return GLKMatrix4UnsafePointer(&self)
+//        let ptr = UnsafePointer<Float>(m)
+////        ptr.memory = self
+////        //        ptr.memory = self
+//        return ptr
+    }
+//    var raw: UnsafePointer<Matrix4> {
+//        var ptr = UnsafePointer<Matrix4>()
+//        ptr.memory = self
+//        return ptr
+//    }
+//    
+    static let numberOfElements: Int = 16
     
 }
 
-var quadVertexData: [Float] =
-[
-     1.0,  1.0, 0.0, 1.0,
-    -1.0,  1.0, 0.0, 1.0,
-    -1.0, -1.0, 0.0, 1.0,
-    
-     1.0,  1.0, 0.0, 1.0,
-     1.0, -1.0, 0.0, 1.0,
-    -1.0, -1.0, 0.0, 1.0,
-    
-]
-
-let quadVertexColorData: [Float] =
-[
-    0.8,  0.0, 0.0, 1.0,
-    0.0,  0.8, 0.0, 1.0,
-    0.0,  0.0, 0.8, 1.0,
-    
-    0.8,  0.0, 0.0, 1.0,
-    0.8,  0.8, 0.0, 1.0,
-    0.0,  0.0, 0.8, 1.0,
-]
 
 
-let triVertexData:[Float] =
-[
-    -1.0, -1.0, 0.0, 1.0,
-    -1.0,  1.0, 0.0, 1.0,
-    1.0, -1.0, 0.0, 1.0,
-    
-    1.0, -1.0, 0.0, 1.0,
-    -1.0,  1.0, 0.0, 1.0,
-    1.0,  1.0, 0.0, 1.0,
-    
-    -0.0, 0.25, 0.0, 1.0,
-    -0.25, -0.25, 0.0, 1.0,
-    0.25, -0.25, 0.0, 1.0
-]
-
-let triVertexColorData:[Float] =
-[
-    0.0, 0.0, 1.0, 1.0,
-    0.0, 0.0, 1.0, 1.0,
-    0.0, 0.0, 1.0, 1.0,
-    
-    0.0, 0.0, 1.0, 1.0,
-    0.0, 0.0, 1.0, 1.0,
-    0.0, 0.0, 1.0, 1.0,
-    
-    0.0, 0.0, 1.0, 1.0,
-    0.0, 1.0, 0.0, 1.0,
-    1.0, 0.0, 0.0, 1.0
-]
+//
+//
+//var quadVertexData: [Float] =
+//[
+//     1.0,  1.0, 0.0, 1.0,
+//    -1.0,  1.0, 0.0, 1.0,
+//    -1.0, -1.0, 0.0, 1.0,
+//    
+//     1.0,  1.0, 0.0, 1.0,
+//     1.0, -1.0, 0.0, 1.0,
+//    -1.0, -1.0, 0.0, 1.0,
+//    
+//]
+//
+//let quadVertexColorData: [Float] =
+//[
+//    0.8,  0.0, 0.0, 1.0,
+//    0.0,  0.8, 0.0, 1.0,
+//    0.0,  0.0, 0.8, 1.0,
+//    
+//    0.8,  0.0, 0.0, 1.0,
+//    0.8,  0.8, 0.0, 1.0,
+//    0.0,  0.0, 0.8, 1.0,
+//]
+//
+//
+//let triVertexData:[Float] =
+//[
+//    -1.0, -1.0, 0.0, 1.0,
+//    -1.0,  1.0, 0.0, 1.0,
+//    1.0, -1.0, 0.0, 1.0,
+//    
+//    1.0, -1.0, 0.0, 1.0,
+//    -1.0,  1.0, 0.0, 1.0,
+//    1.0,  1.0, 0.0, 1.0,
+//    
+//    -0.0, 0.25, 0.0, 1.0,
+//    -0.25, -0.25, 0.0, 1.0,
+//    0.25, -0.25, 0.0, 1.0
+//]
+//
+//let triVertexColorData:[Float] =
+//[
+//    0.0, 0.0, 1.0, 1.0,
+//    0.0, 0.0, 1.0, 1.0,
+//    0.0, 0.0, 1.0, 1.0,
+//    
+//    0.0, 0.0, 1.0, 1.0,
+//    0.0, 0.0, 1.0, 1.0,
+//    0.0, 0.0, 1.0, 1.0,
+//    
+//    0.0, 0.0, 1.0, 1.0,
+//    0.0, 1.0, 0.0, 1.0,
+//    1.0, 0.0, 0.0, 1.0
+//]

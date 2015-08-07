@@ -10,16 +10,41 @@ import Foundation
 import SpriteKit
 import MetalKit
 
-class GameScene {
+//func =(inout lhs:(width: Float, height: Float), rhs: NSSize)  {
+//    lhs.0 = Float(rhs.width)
+//    lhs.1 = Float(rhs.height)
+//}
+class GameScene : CustomStringConvertible {
     
-    var size: NSSize!
+    private static var _gameScene: GameScene?
+    
+    static var current: GameScene {
+        
+        return _gameScene ?? GameScene()
+    }
+    var size: (width: Float, height: Float)
     var life: Life?
     var cells: [[GameOfLifeNode]] = [[GameOfLifeNode]]()
+    var shape: ShapeType
+    var cellRadius: Float = 0
     
-    init(size: NSSize, inout verts: [Float]) {
-        self.size = size//AppDelegate.window.contentLayoutRect.size
-        self.setLife()
-        self.scaleVertices(&verts, scale: 1 / self.life!.width)
+    init(size: NSSize? = nil, shape: ShapeType = .Square) {
+        self.shape = shape
+        if let size = size ?? NSScreen.mainScreen()?.frame.size {
+            self.size.width = Float(size.width)
+            self.size.height = Float(size.height)
+        } else {
+            NSLog("WARNING: Size init problems in GameScene.init()...")
+            let size = GameViewController.current.view.bounds.size
+            self.size.width = Float(size.width)
+            self.size.height = Float(size.height)
+        }
+        if (GameScene._gameScene == nil) {
+            GameScene._gameScene = self
+        } else {
+            fatalError("Do not reinit")
+        }
+//        self.scaleVertices(&verts, scale: 1 / self.life!.width)
     }
    
     func scaleVertices(inout verts: [Float], scale: Float) {
@@ -100,24 +125,31 @@ class GameScene {
                     cell.update()
                 }
             }
-//            print(life)
+//            NSLog("\(cells.count * cells[0].count) cells of size: \(self.cellRadius)\n\(life)")
+        } else {
+            self.prepareGame(self.shape)
+            self.update(currentTime)
         }
     }
     
-    func setLife(shape: GameOfLifeNode.Shape = .Square) {
-        let bounds = self.size
-        let radius: CGFloat = 5
-        self.life = Life.new(bounds.width / radius, height: bounds.height / radius)
+    func prepareGame(shape: ShapeType, maxNoOfCells: Float = 1000) {
+        self.shape = shape
+        self.cellRadius = (self.size.height + self.size.width) * 0.5 /  sqrt(maxNoOfCells)
+        self.life = Life.new(self.size.width / self.cellRadius, height: self.size.height / self.cellRadius)
         
         for var y = 0; y < self.life?.h; ++y {
             self.cells.append([GameOfLifeNode]())
             for var x = 0; x < self.life?.w; ++x {
-                self.cells[y].append(GameOfLifeNode(life: self.life!, x: x, y: y, radius: Float(radius), shape: shape))
+                self.cells[y].append(GameOfLifeNode(life: self.life!, x: x, y: y, radius: self.cellRadius, shape: shape))
                 
             }
         }
+        NSLog("\(self)")
     }
     
+    var description: String {
+        return "\(cells.count * cells[0].count) cells of size: \(self.cellRadius). INITIAL GAME:\n\(self.life), "
+    }
     func addChild(node: GameOfLifeNode) {
         
     }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import GLKit;
+//import GLKit;
 class GameOfLifeNode  {
     enum Error: ErrorType {
         case BufferLargerThanRadius
@@ -25,16 +25,19 @@ class GameOfLifeNode  {
 //        return GLKVector3Make(t.m30, t.m31, t.m32)
 //    }
     
-    var transform: GLKMatrix4 = GLKMatrix4Identity
+//    var transform: GLKMatrix4 = GLKMatrix4Identity
     
-    enum Shape {
-        case Square, Circle
-    }
-    init(life: Life, x: Int, y: Int, radius: Float, buffer: Float = 2, shape: Shape = .Square) {
+    
+    
+    init(life: Life, x: Int, y: Int, radius: Float, buffer: Float = 2, shape: ShapeType = .Square) {
         self.ref = (x,y)
         self.life = life
         self.radius = radius
-        self.shape = shape;
+        switch shape {
+        case .Square:
+            self.shape = Shape.Square
+        }
+        
         do {
             try self.positionNode(buffer)
         } catch {

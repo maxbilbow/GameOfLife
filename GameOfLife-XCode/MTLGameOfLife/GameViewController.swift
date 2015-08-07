@@ -19,11 +19,11 @@ class GameViewController: NSViewController, MTKViewDelegate {
     
     
     let device: MTLDevice = MTLCreateSystemDefaultDevice()!
-    
+//    var metalLayer: CAMetalLayer = CAMetalLayer()
     var commandQueue: MTLCommandQueue! = nil
     var pipelineState: MTLRenderPipelineState! = nil
     var vertexBuffer: MTLBuffer! = nil
-    var vertexColorBuffer: MTLBuffer! = nil
+//    var vertexColorBuffer: MTLBuffer! = nil
     
     let inflightSemaphore = dispatch_semaphore_create(MaxBuffers)
     var bufferIndex = 0
@@ -33,27 +33,28 @@ class GameViewController: NSViewController, MTKViewDelegate {
 //    var yOffset:[Float] = [ 1.0, 0.0, -1.0 ]
 //    var xDelta:[Float] = [ 0.002, -0.001, 0.003 ]
 //    var yDelta:[Float] = [ 0.001,  0.002, -0.001 ]
-    var scene: GameScene!
-    
+//    var scene: GameScene!
+    lazy var shapes: [Shape] = []
     static var current: GameViewController!
+    
     override func viewDidLoad() {
         GameViewController.current = self
         super.viewDidLoad()
-        self.scene = GameScene(size: self.view.bounds.size, verts: &quadVertexData);
-        for vert in quadVertexData {
-            print("v: \(vert)")
-        }
+        
+        
         // setup view properties
         let view = self.view as! MTKView
         view.delegate = self
         view.device = device
         view.sampleCount = 4
-                loadAssets()
+        loadAssets()
+        
+        print(GameScene.current.size)
     }
 
-    
+//    var pipelineStateDescriptor: MTLRenderPipelineDescriptor!
     func loadAssets() {
-        
+        shapes.append(Shape.Square)
         // load any resources required for rendering
         let view = self.view as! MTKView
         commandQueue = device.newCommandQueue()
@@ -70,81 +71,48 @@ class GameViewController: NSViewController, MTKViewDelegate {
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
         pipelineStateDescriptor.sampleCount = view.sampleCount
         
+        
         do {
             try pipelineState = device.newRenderPipelineStateWithDescriptor(pipelineStateDescriptor)
         } catch let error {
             print("Failed to create pipeline state, error \(error)")
         }
         
-        // generate a large enough buffer to allow streaming vertices for 3 semaphore controlled frames
-        vertexBuffer = device.newBufferWithLength(ConstantBufferSize, options: [])
-        vertexBuffer.label = "vertices"
         
-        let vertexColorSize = quadVertexData.count * sizeofValue(quadVertexColorData[0])
-        vertexColorBuffer = device.newBufferWithBytes(quadVertexColorData, length: vertexColorSize, options: [])
-        vertexColorBuffer.label = "colors"
     }
-    
-    func update() {
-        
-        // vData is pointer to the MTLBuffer's Float data contents
-        let pData = vertexBuffer.contents()
-        let vData = UnsafeMutablePointer<Float>(pData + 256*bufferIndex)
-        
-        // reset the vertices to default before adding animated offsets
-        vData.initializeFrom(quadVertexData)
-        
-        // Animate triangle offsets
-//        let lastTriVertex = 24
-//        let vertexSize = 4
-//        for j in 0..<MaxBuffers {
-//            // update the animation offsets
-//            xOffset[j] += xDelta[j]
-//            
-//            if(xOffset[j] >= 1.0 || xOffset[j] <= -1.0) {
-//                xDelta[j] = -xDelta[j]
-//                xOffset[j] += xDelta[j]
-//            }
-//            
-//            yOffset[j] += yDelta[j]
-//            
-//            if(yOffset[j] >= 1.0 || yOffset[j] <= -1.0) {
-//                yDelta[j] = -yDelta[j]
-//                yOffset[j] += yDelta[j]
-//            }
-//            
-//            // Update last triangle position with updated animated offsets
-//            let pos = lastTriVertex + j*vertexSize
-//            vData[pos] = xOffset[j]
-//            vData[pos+1] = yOffset[j]
-//        }
-    }
-    
-//    func drawableSizeWillChange(view: MTKView, willLayoutWithSize size: CGSize) {
-//        NSLog("\(view)")//self.drawInView(view)a
-//    }
+  
     
     func drawInMTKView(view: MTKView) {
-        self.scene.update(NSTimeIntervalSince1970)
+        GameScene.current.update(NSTimeIntervalSince1970)
         // use semaphore to encode 3 frames ahead
         dispatch_semaphore_wait(inflightSemaphore, DISPATCH_TIME_FOREVER)
-        
-        self.update()
         
         let commandBuffer = commandQueue.commandBuffer()
         commandBuffer.label = "Frame command buffer"
         let renderEncoder = commandBuffer.renderCommandEncoderWithDescriptor(view.currentRenderPassDescriptor!)
         renderEncoder.label = "render encoder"
-        
-        renderEncoder.pushDebugGroup("draw morphing square")
+       
         renderEncoder.setRenderPipelineState(pipelineState)
-        renderEncoder.setVertexBuffer(vertexBuffer, offset: 256*bufferIndex, atIndex: 0)
-        renderEncoder.setVertexBuffer(vertexColorBuffer, offset:0 , atIndex: 1)
-        renderEncoder.drawPrimitives(.TriangleStrip, vertexStart: 0, vertexCount: 6, instanceCount: 1)
+        for shape in self.shapes {
+            renderEncoder.pushDebugGroup("draw \(shape.name)")
+            shape.render(view, renderEncoder: renderEncoder, commandBuffer: commandBuffer, pipelineState: pipelineState, drawable: view.currentDrawable!, clearColor: nil)
+            renderEncoder.popDebugGroup()
+        }
+        renderEncoder.endEncoding()
+
+//        commandBuffer.label = "Frame command buffer"
+//        let renderEncoder = commandBuffer.renderCommandEncoderWithDescriptor(view.currentRenderPassDescriptor!)
+//        renderEncoder.label = "render encoder"
+        
+        
+//
+//        renderEncoder.setVertexBuffer(vertexBuffer, offset: 256*bufferIndex, atIndex: 0)
+//        renderEncoder.setVertexBuffer(vertexColorBuffer, offset:0 , atIndex: 1)
+//        renderEncoder.drawPrimitives(.TriangleStrip, vertexStart: 0, vertexCount: 6, instanceCount: 1)
        
         
-        renderEncoder.popDebugGroup()
-        renderEncoder.endEncoding()
+//        renderEncoder.popDebugGroup()
+//        renderEncoder.endEncoding()
     
         // use completion handler to signal the semaphore when this frame is completed allowing the encoding of the next frame to proceed
         // use capture list to avoid any retain cycles if the command buffer gets retained anywhere besides this stack frame
@@ -158,16 +126,17 @@ class GameViewController: NSViewController, MTKViewDelegate {
         // bufferIndex matches the current semaphore controled frame index to ensure writing occurs at the correct region in the vertex buffer
         bufferIndex = (bufferIndex + 1) % MaxBuffers
     
+        
         commandBuffer.presentDrawable(view.currentDrawable!)
 
         commandBuffer.commit()
 
     }
     
-    
-    func view(view: MTKView, willLayoutWithSize size: CGSize) {
+    func mtkView(view: MTKView, drawableSizeWillChange size: CGSize) {
         
     }
+    
     
     func drawInView(o: MTKView) {
         NSLog("DRAW IN VIEW: \(o)")

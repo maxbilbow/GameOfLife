@@ -22,6 +22,7 @@
 		6C3F688F1B74BD2800D80E60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C3F688E1B74BD2800D80E60 /* Assets.xcassets */; };
 		6C3F68921B74BD2800D80E60 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C3F68901B74BD2800D80E60 /* MainMenu.xib */; };
 		6C3F68981B74C03C00D80E60 /* VertexData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3F68971B74C03C00D80E60 /* VertexData.swift */; };
+		6CA6600E1B74C44E00FA55D3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CA6600D1B74C44E00FA55D3 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,18 @@
 			remoteInfo = SKGameOfLife;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6CA660091B74C44E00FA55D3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6C041B3F1B74BC18004F7DCD /* SKGameOfLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SKGameOfLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +78,8 @@
 		6C3F68911B74BD2800D80E60 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C3F68931B74BD2800D80E60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C3F68971B74C03C00D80E60 /* VertexData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VertexData.swift; sourceTree = "<group>"; };
+		6CA6600B1B74C44E00FA55D3 /* GameOfLife-OpenGL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "GameOfLife-OpenGL"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CA6600D1B74C44E00FA55D3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +111,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6CA660081B74C44E00FA55D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -106,6 +128,7 @@
 				6C041B551B74BC18004F7DCD /* SKGameOfLifeTests */,
 				6C041B601B74BC18004F7DCD /* SKGameOfLifeUITests */,
 				6C3F68871B74BD2800D80E60 /* MTLGameOfLife */,
+				6CA6600C1B74C44E00FA55D3 /* GameOfLife-OpenGL */,
 				6C041B401B74BC18004F7DCD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,6 +140,7 @@
 				6C041B521B74BC18004F7DCD /* SKGameOfLifeTests.xctest */,
 				6C041B5D1B74BC18004F7DCD /* SKGameOfLifeUITests.xctest */,
 				6C3F68861B74BD2800D80E60 /* MTLGameOfLife.app */,
+				6CA6600B1B74C44E00FA55D3 /* GameOfLife-OpenGL */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,6 +190,14 @@
 				6C3F68971B74C03C00D80E60 /* VertexData.swift */,
 			);
 			path = MTLGameOfLife;
+			sourceTree = "<group>";
+		};
+		6CA6600C1B74C44E00FA55D3 /* GameOfLife-OpenGL */ = {
+			isa = PBXGroup;
+			children = (
+				6CA6600D1B74C44E00FA55D3 /* main.cpp */,
+			);
+			path = "GameOfLife-OpenGL";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,6 +273,23 @@
 			productReference = 6C3F68861B74BD2800D80E60 /* MTLGameOfLife.app */;
 			productType = "com.apple.product-type.application";
 		};
+		6CA6600A1B74C44E00FA55D3 /* GameOfLife-OpenGL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CA660111B74C44E00FA55D3 /* Build configuration list for PBXNativeTarget "GameOfLife-OpenGL" */;
+			buildPhases = (
+				6CA660071B74C44E00FA55D3 /* Sources */,
+				6CA660081B74C44E00FA55D3 /* Frameworks */,
+				6CA660091B74C44E00FA55D3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "GameOfLife-OpenGL";
+			productName = "GameOfLife-OpenGL";
+			productReference = 6CA6600B1B74C44E00FA55D3 /* GameOfLife-OpenGL */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -265,6 +314,9 @@
 					6C3F68851B74BD2800D80E60 = {
 						CreatedOnToolsVersion = 7.0;
 					};
+					6CA6600A1B74C44E00FA55D3 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 				};
 			};
 			buildConfigurationList = 6C041B3A1B74BC18004F7DCD /* Build configuration list for PBXProject "GameOfLife" */;
@@ -284,6 +336,7 @@
 				6C041B511B74BC18004F7DCD /* SKGameOfLifeTests */,
 				6C041B5C1B74BC18004F7DCD /* SKGameOfLifeUITests */,
 				6C3F68851B74BD2800D80E60 /* MTLGameOfLife */,
+				6CA6600A1B74C44E00FA55D3 /* GameOfLife-OpenGL */,
 			);
 		};
 /* End PBXProject section */
@@ -360,6 +413,14 @@
 				6C3F688B1B74BD2800D80E60 /* GameViewController.swift in Sources */,
 				6C3F68891B74BD2800D80E60 /* AppDelegate.swift in Sources */,
 				6C3F68981B74C03C00D80E60 /* VertexData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CA660071B74C44E00FA55D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CA6600E1B74C44E00FA55D3 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +641,22 @@
 			};
 			name = Release;
 		};
+		6CA6600F1B74C44E00FA55D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6CA660101B74C44E00FA55D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -624,6 +701,15 @@
 			buildConfigurations = (
 				6C3F68941B74BD2800D80E60 /* Debug */,
 				6C3F68951B74BD2800D80E60 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6CA660111B74C44E00FA55D3 /* Build configuration list for PBXNativeTarget "GameOfLife-OpenGL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CA6600F1B74C44E00FA55D3 /* Debug */,
+				6CA660101B74C44E00FA55D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

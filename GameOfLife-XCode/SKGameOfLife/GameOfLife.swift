@@ -67,6 +67,14 @@ class Life : CustomStringConvertible {
     var a, b: Field
     var w, h: Int
     
+    var width: Float {
+        return Float(self.w)
+    }
+    
+    var height: Float {
+        return Float(self.h)
+    }
+    
     init(fieldA a: Field, fildB b: Field, width w: Int, height h: Int){
         self.a = a
         self.b = b
@@ -77,6 +85,16 @@ class Life : CustomStringConvertible {
     
     // NewLife returns a new Life game state with a random initial state.
     class func new(width: CGFloat, height: CGFloat) -> Life {
+        let w = Int(width); let h = Int(height)
+        var a: Field = Field.new(width: w, height: h)
+        for var i = 0; i < (w * h / 4); i++ {
+            a.set(random() % w,y: random() % h, b: true)
+        }
+        return Life(fieldA: a, fildB: Field.new(width: w, height: h), width: w, height: h)
+    }
+    
+    // NewLife returns a new Life game state with a random initial state.
+    class func new(width: Float, height: Float) -> Life {
         let w = Int(width); let h = Int(height)
         var a: Field = Field.new(width: w, height: h)
         for var i = 0; i < (w * h / 4); i++ {

@@ -18,14 +18,8 @@ struct Vertex{
         return [x,y,z,r,g,b,a]
     }
     
-    static var Square: [Vertex] = [
-        Vertex(x:  1, y:  1, z: 0, r: 1, g: 0, b: 0, a: 1),
-        Vertex(x: -1, y:  1, z: 0, r: 0, g: 1, b: 0, a: 1),
-        Vertex(x: -1, y: -1, z: 0, r: 0, g: 0, b: 1, a: 1),
-        Vertex(x:  1, y: -1, z: 0, r: 1, g: 1, b: 0, a: 1),
-    ]
-    
 };
+
 
 import GLKit
 typealias Matrix4 = GLKMatrix4

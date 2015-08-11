@@ -80,7 +80,8 @@ class Shape {
         // 3
         let bufferPointer = uniformBuffer?.contents()
         // 4
-        memcpy(bufferPointer!, nodeModelMatrix.raw(),
+        memcpy(bufferPointer!,
+            nodeModelMatrix.raw(),
             sizeof(Float)*Matrix4.numberOfElements)
         memcpy(bufferPointer! + sizeof(Float)*Matrix4.numberOfElements,
             projectionMatrix,
@@ -116,7 +117,7 @@ class Shape {
     private static var _square: Shape?
     static var Square: Shape {
         return _square ?? { () -> Shape in
-            _square = Shape(name: "Square", vertices: Vertex.Square, device: GameViewController.current.device)
+            _square = Shape(name: "Square", vertices: ASquare, device: GameViewController.current.device)
             return _square!
             }()
     }
@@ -132,7 +133,13 @@ class Shape {
     var description: String {
         return "\(positionX), \(positionY), \(positionZ)"
     }
-
+    
+    static var ASquare: [Vertex] = [
+        Vertex(x:  1, y:  1, z: 0, r: 1, g: 0, b: 0, a: 1),
+        Vertex(x: -1, y:  1, z: 0, r: 0, g: 1, b: 0, a: 1),
+        Vertex(x: -1, y: -1, z: 0, r: 0, g: 0, b: 1, a: 1),
+        Vertex(x:  1, y: -1, z: 0, r: 1, g: 1, b: 0, a: 1),
+    ]
 
 
 

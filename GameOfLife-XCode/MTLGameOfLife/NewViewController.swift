@@ -9,7 +9,7 @@
 import Foundation
 import MetalKit
 import QuartzCore
-let MaxBuffers = 3
+let MaxBuffers = 2
 //let ConstantBufferSize = 1024*1024
 
 class GameViewController: NSViewController, MTKViewDelegate {

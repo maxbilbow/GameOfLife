@@ -1,8 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../ADHDSimulator/Pro-Crastinate/Assets/Pro-Crastinate/Scripts/GameData.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameOfLife/Scripts/GameOfLife.cs">
     <Files>
-      <File FileName="../ADHDSimulator/Pro-Crastinate/Assets/Pro-Crastinate/Scripts/GameData.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/RMXUnity/AGameController.cs" Line="120" Column="2" />
+      <File FileName="Assets/GameOfLife/Scripts/GameOfLifeController.cs" Line="88" Column="5" />
+      <File FileName="Assets/GameOfLife/Scripts/GameOfLife.cs" Line="43" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

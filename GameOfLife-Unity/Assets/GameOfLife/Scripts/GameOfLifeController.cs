@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using RMX;
 
-public class GameOfLifeController : MonoBehaviour{
+public class GameOfLifeController : AGameController<GameOfLifeController> {
 
 	public int diameter = 5;
 
@@ -17,8 +17,33 @@ public class GameOfLifeController : MonoBehaviour{
 
 	private bool cameraWillMove = true;
 
+	protected override void StartDesktop ()
+	{
+
+	}
+
+	protected override void StartMobile ()
+	{
+
+	}
+
+	protected override void StartSingletons ()
+	{
+
+	}
+
+
+	public override void Patch ()
+	{
+
+	}
+
+	public override void PauseGame (bool pause, object args)
+	{
+
+	}
 	// Use this for initialization
-	void Start () {
+	protected override void PostStart() {
 		int w = (int) Screen.width / diameter; 
 		int h = (int) Screen.height / diameter;// Camera.current.pixelWidth / diameter; var h = Camera.current.pixelHeight / diameter;
 		print ("height: " + h + ", width: " + w);
